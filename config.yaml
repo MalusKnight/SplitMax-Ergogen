@@ -1,0 +1,312 @@
+units:
+  # Cherry MX ULP
+  kx: u
+  ky: u
+  px: kx + 4
+  py: ky + 4
+  led_pos_x: 0
+  led_pos_y: 4.5
+  led_rotation: 0
+points:
+  zones:
+    matrix:
+      anchor: 
+        shift: [145 , -180] #KiCAD Sheet Placement
+      key:
+        tags:
+          - key
+      rows:
+        bottom: #5
+          key:
+            row_net: P4
+        home: #4
+          key:
+            row_net: P3
+        top: #3
+          key:
+            row_net: P2
+        numbers: #2
+          key:
+            row_net: P0
+        functions: #1
+          shift: [0,7]
+          key:
+            row_net: P1
+      columns:
+        outer: #6
+          key:
+            column_net: P20
+          rows:
+            function.key:
+              led_prev: LED_30
+              led_next: GND
+            numbers.key:
+              led_prev: LED_29
+              led_next: LED_30
+            top.key:
+              led_prev: LED_28
+              led_next: LED_29
+            home.key:
+              led_prev: LED_27
+              led_next: LED_28
+            bottom.key:
+              led_prev: LED_26
+              led_next: LED_27
+        pinkie: #5
+          key:
+            column_net: P21
+          rows:
+            function.key:
+              led_prev: LED_21
+              led_next: LED_22
+            numbers.key:
+              led_prev: LED_22
+              led_next: LED_23
+            top.key:
+              led_prev: LED_23
+              led_next: LED_24
+            home.key:
+              led_prev: LED_24
+              led_next: LED_25
+            bottom.key:
+              led_prev: LED_25
+              led_next: LED_26
+        ring: #4
+          key:
+           stagger: 15
+           column_net: P9
+          rows:
+            function.key:
+              led_prev: LED_20
+              led_next: LED_21
+            numbers.key:
+              led_prev: LED_19
+              led_next: LED_20
+            top.key:
+              led_prev: LED_18
+              led_next: LED_19
+            home.key:
+              led_prev: LED_17
+              led_next: LED_18
+            bottom.key:
+              led_prev: LED_16
+              led_next: LED_17
+        middle: #3
+          key:
+            stagger: 6
+            column_net: P8
+          rows:
+            function.key:
+              led_prev: LED_11
+              led_next: LED_12
+            numbers.key:
+              led_prev: LED_12
+              led_next: LED_13
+            top.key:
+              led_prev: LED_13
+              led_next: LED_14
+            home.key:
+              led_prev: LED_14
+              led_next: LED_15
+            bottom.key:
+              led_prev: LED_15
+              led_next: LED_16
+        index: #2
+          key:
+            stagger: -12
+            column_net: P7
+          rows:
+            function.key:
+              led_prev: LED_10
+              led_next: LED_11
+            numbers.key:
+              led_prev: LED_9
+              led_next: LED_10
+            top.key:
+              led_prev: LED_8
+              led_next: LED_9
+            home.key:
+              led_prev: LED_7
+              led_next: LED_8
+            bottom.key:
+              led_prev: LED_6
+              led_next: LED_7
+        inner: #1
+          key:
+            stagger: -2
+            column_net: P6
+          rows:
+            function.key:
+              led_prev: VCC
+              led_next: LED_1
+            numbers.key:
+              led_prev: LED_1
+              led_next: LED_2
+            top.key:
+              led_prev: LED_2
+              led_next: LED_3
+            home.key:
+              led_prev: LED_3
+              led_next: LED_4
+            bottom.key:
+              led_prev: LED_5
+              led_next: LED_6
+    thumb: #row 6
+      anchor:
+        ref: matrix_index_bottom
+        shift: [21,-24]
+        rotate: -20
+      rows:
+        cluster: 
+          key:
+            row_net: P5
+      columns:
+        inner:
+          key:
+            column_net: P8
+        middle:
+          key:
+            height: 1.5kx 
+            column_net: P7
+        outer:
+          key:
+            column_net: P6
+    thumb2: #row 6 (P5), column 4 (P9)
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [11.5, -51.5]
+        rotate: -20
+outlines:
+  raw:
+    - where: true
+      what: rectangle
+      size: [px , py]
+      fillet: 2
+  keys:
+    - where: true
+      what: rectangle
+      size: kx
+  switches:
+    - where: true
+      what: rectangle
+      size: kx-2
+  diodes:
+    - where: true
+      what: rectangle
+      size: 1    
+  leds:
+    - where: true
+      what: rectangle
+      size: 5
+  board:
+    - what: polygon
+      fillet: 2
+      operation: stack
+      points:
+        - ref: matrix_outer_functions
+          shift: [-0.5px , 1.3py]
+        - ref: matrix_middle_functions
+          shift: [-0.6px , 1.3py]
+        - ref: matrix_middle_functions
+          shift: [0.5px , 1.3py]
+        - ref: matrix_inner_functions
+          shift: [2.32px , 0.5py]
+        - ref: thumb_outer_cluster
+          shift: [0.5px , 0.5py]
+        - ref: thumb_outer_cluster
+          shift: [0.5px , -0.5py]
+        - ref: thumb2
+          shift: [0.5px , -0.5py]
+        - ref: thumb2
+          shift: [-0.5px , -0.5py]
+        - ref: thumb_inner_cluster
+          shift: [-0.5px , -0.5py]
+        - ref: matrix_pinkie_bottom
+          shift: [0.5px , -0.5py]
+        - ref: matrix_outer_bottom
+          shift: [-0.5px , -0.5py]
+  combo:
+    - name: board
+      operation: stack
+    - name: keys
+      operation: stack
+    - name: switches
+      operation: stack
+    - name: diodes
+      operation: stack
+    - name: leds
+      operation: stack
+
+pcbs:
+  main:
+    outlines:
+      - outline: combo
+    template: kicad8   
+    footprints:
+      Cherry ULP:
+        what: mx6b_ulp
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+      diode:
+        what: ceoloide/diode_tht_sod123
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0 , 3]
+      nice_nano: #controller
+        what: ceoloide/mcu_nice_nano
+        params:
+          side: B
+          reverse_mount: true
+        where:
+         ref: matrix_inner_functions
+         shift: [32 , -11]
+      reset:
+        what: ceoloide/reset_switch_smd_side
+        params:
+          from: GND
+          to: RST
+        where:
+          ref: matrix_inner_functions
+          shift: [50.5 , 0]
+          rotate: -90
+      battery conn:
+        what: ceoloide/battery_connector_jst_ph_2
+        params:
+          side: B
+          BAT_P: RAW
+          BAT_N: GND
+        where:
+          ref: matrix_inner_functions
+          rotate: 0
+          shift: [15 , 12]
+      oled:
+        what: ceoloide/display_ssd1306
+        params:
+          SDA: P18
+          SCL: P19
+          VCC: VCC
+          GND: GND
+        where:
+          ref: matrix_inner_home
+          shift: [32 , 20]
+          rotate: -90
+      switch_led:
+        what: ceoloide/led_sk6812mini-e
+        where: [true]
+        params:
+          P1: VCC
+          P2: "{{key.led_next}}" #DOUT
+          P3: GND
+          P4: "{{key.led_prev}}" #DIN
+          reversible: false
+          reverse_mount: true
+          include_courtyard: false
+          include_keepout: true
+        adjust:
+          shift: [led_pos_x, led_pos_y + 5]
+          rotate: led_rotation
