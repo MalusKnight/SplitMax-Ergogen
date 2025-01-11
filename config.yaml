@@ -39,7 +39,7 @@ points:
           rows:
             function.key:
               led_prev: LED_30
-              led_next: GND
+              led_next: LED_31
             numbers.key:
               led_prev: LED_29
               led_next: LED_30
@@ -164,6 +164,10 @@ points:
         inner:
           key:
             column_net: P8
+          rows:
+            key:
+              led2_previous: LED_31
+              led2_next:
         middle:
           key:
             height: 1.5kx 
@@ -303,6 +307,21 @@ pcbs:
           P2: "{{key.led_next}}" #DOUT
           P3: GND
           P4: "{{key.led_prev}}" #DIN
+          reversible: false
+          reverse_mount: true
+          include_courtyard: false
+          include_keepout: true
+        adjust:
+          shift: [led_pos_x, led_pos_y + 5]
+          rotate: led_rotation
+      thumb_switch_led:
+        what: ceoloide/led_sk6812mini-e
+        where: [true]
+        params:
+          P1: VCC
+          P2: "{{key.led2_next}}" #DOUT
+          P3: GND
+          P4: "{{key.led2_prev}}" #DIN
           reversible: false
           reverse_mount: true
           include_courtyard: false
