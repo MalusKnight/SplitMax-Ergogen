@@ -1,45 +1,39 @@
 units:
-  # Cherry MX ULP
-  kx: u
-  ky: u
-  px: kx + 4
-  py: ky + 4
+  # Sypher Keyboard
+  # Cherry MX ULP Switches
+  sx: u
+  sy: u
+  # Cherry MX ULP Caps
+  kx: u - 3 
+  ky: u - 3 
+  # padding variable
+  px: sx + 4
+  py: sy + 4
+  # double padding variable
+  dpx: sx + 8
+  dpy: sy + 8
+  # LED position
   led_pos_x: 0
   led_pos_y: 4.5
   led_rotation: 0
+  # Defaulting to M2 Screws
+  screwSize: 1.5
+  standoffSize: 2.5
 points:
   zones:
     matrix:
       anchor: 
-        shift: [145 , -180] #KiCAD Sheet Placement
+        shift: [60 , -180] #KiCAD Sheet Placement
       key:
         tags:
           - key
-      rows:
-        bottom: #5
-          key:
-            row_net: P4
-        home: #4
-          key:
-            row_net: P3
-        top: #3
-          key:
-            row_net: P2
-        numbers: #2
-          key:
-            row_net: P0
-        functions: #1
-          shift: [0,7]
-          key:
-            row_net: P1
       columns:
         outer: #6
           key:
             column_net: P20
-          rows:
             function.key:
               led_prev: LED_30
-              led_next: LED_31
+              led_next: GND
             numbers.key:
               led_prev: LED_29
               led_next: LED_30
@@ -55,7 +49,6 @@ points:
         pinkie: #5
           key:
             column_net: P21
-          rows:
             function.key:
               led_prev: LED_21
               led_next: LED_22
@@ -75,27 +68,25 @@ points:
           key:
            stagger: 15
            column_net: P9
-          rows:
-            function.key:
+           function.key:
               led_prev: LED_20
               led_next: LED_21
-            numbers.key:
+           numbers.key:
               led_prev: LED_19
               led_next: LED_20
-            top.key:
+           top.key:
               led_prev: LED_18
               led_next: LED_19
-            home.key:
+           home.key:
               led_prev: LED_17
               led_next: LED_18
-            bottom.key:
+           bottom.key:
               led_prev: LED_16
               led_next: LED_17
         middle: #3
           key:
             stagger: 6
             column_net: P8
-          rows:
             function.key:
               led_prev: LED_11
               led_next: LED_12
@@ -115,7 +106,6 @@ points:
           key:
             stagger: -12
             column_net: P7
-          rows:
             function.key:
               led_prev: LED_10
               led_next: LED_11
@@ -135,7 +125,6 @@ points:
           key:
             stagger: -2
             column_net: P6
-          rows:
             function.key:
               led_prev: VCC
               led_next: LED_1
@@ -151,35 +140,61 @@ points:
             bottom.key:
               led_prev: LED_5
               led_next: LED_6
+      rows:
+        bottom: #5
+          row_net: P4
+        home: #4
+          row_net: P3
+        top: #3
+          row_net: P2
+        numbers: #2
+          row_net: P0
+        functions: #1
+          shift: [0,7]
+          row_net: P1
     thumb: #row 6
       anchor:
         ref: matrix_index_bottom
         shift: [21,-24]
         rotate: -20
+      key:
+        tags:
+          - thumb
       rows:
         cluster: 
-          key:
-            row_net: P5
+          row_net: P5
       columns:
         inner:
           key:
             column_net: P8
-          rows:
-            key:
-              led2_previous: LED_31
-              led2_next:
+            led_prev: VCC
+            led_next: LED_A
         middle:
           key:
             height: 1.5kx 
             column_net: P7
+            led_prev: LED_A
+            led_next: LED_B
         outer:
           key:
             column_net: P6
-    thumb2: #row 6 (P5), column 4 (P9)
+            led_prev: LED_B
+            led_next: LED_C
+    thumb2: #row 7 (P10), column 4 (P9)
       anchor:
         ref: matrix_inner_bottom
         shift: [11.5, -51.5]
         rotate: -20
+      key:
+        tags:
+          - thumb2
+        led_prev: LED_C
+        led2_next: GND
+        column_net: P9
+        row_net: P10
+  mirror: &mirror
+    ref: matrix_inner_functions
+    distance: 6.5sx
 outlines:
   raw:
     - where: true
@@ -190,10 +205,11 @@ outlines:
     - where: true
       what: rectangle
       size: kx
+      fillet: 2
   switches:
-    - where: true
+    - where: false
       what: rectangle
-      size: kx-2
+      size: sx
   diodes:
     - where: true
       what: rectangle
@@ -202,19 +218,21 @@ outlines:
     - where: true
       what: rectangle
       size: 5
-  board:
+  board_left:
     - what: polygon
       fillet: 2
       operation: stack
       points:
         - ref: matrix_outer_functions
-          shift: [-0.5px , 1.3py]
+          shift: [-0.5px , 0.5py]
         - ref: matrix_middle_functions
-          shift: [-0.6px , 1.3py]
+          shift: [-0.6px , 0.5py]
         - ref: matrix_middle_functions
-          shift: [0.5px , 1.3py]
+          shift: [0.5px , 0.5py]
         - ref: matrix_inner_functions
-          shift: [2.32px , 0.5py]
+          shift: [1.32px , 0.5py]
+        - ref: matrix_inner_bottom
+          shift: [1.32px , -0.85py]
         - ref: thumb_outer_cluster
           shift: [0.5px , 0.5py]
         - ref: thumb_outer_cluster
@@ -229,8 +247,37 @@ outlines:
           shift: [0.5px , -0.5py]
         - ref: matrix_outer_bottom
           shift: [-0.5px , -0.5py]
+  board_right:
+    - what: polygon
+      fillet: 2
+      operation: stack
+      points:
+        - ref: mirror_matrix_outer_functions
+          shift: [-0.5px , 0.5py]
+        - ref: mirror_matrix_middle_functions
+          shift: [-0.6px , 0.5py]
+        - ref: mirror_matrix_middle_functions
+          shift: [0.5px , 0.5py]
+        - ref: mirror_matrix_inner_functions
+          shift: [1.32px , 0.5py]
+        - ref: mirror_matrix_inner_bottom
+          shift: [1.32px , -0.85py]
+        - ref: mirror_thumb_outer_cluster
+          shift: [0.5px , 0.5py]
+        - ref: mirror_thumb_outer_cluster
+          shift: [0.5px , -0.5py]
+        - ref: mirror_thumb2
+          shift: [0.5px , -0.5py]
+        - ref: mirror_thumb2
+          shift: [-0.5px , -0.5py]
+        - ref: mirror_thumb_inner_cluster
+          shift: [-0.5px , -0.5py]
+        - ref: mirror_matrix_pinkie_bottom
+          shift: [0.5px , -0.5py]
+        - ref: mirror_matrix_outer_bottom
+          shift: [-0.5px , -0.5py]        
   combo:
-    - name: board
+    - name: board_left
       operation: stack
     - name: keys
       operation: stack
@@ -240,25 +287,238 @@ outlines:
       operation: stack
     - name: leds
       operation: stack
-
+    - name: board_right
+      operation: stack
+  x1Board_left:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: matrix_outer_functions
+          shift: [-0.54dpx , 0.5dpy]
+        - ref: matrix_middle_functions
+          shift: [-0.6dpx , 0.53dpy]
+        - ref: matrix_middle_functions
+          shift: [0.5dpx , 0.53dpy]
+        - ref: matrix_inner_functions
+          shift: [1.25dpx , 0.5dpy]
+        - ref: matrix_inner_bottom
+          shift: [1.25dpx , -0.65dpy]
+        - ref: thumb_outer_cluster
+          shift: [0.53dpx , 0.53dpy]
+        - ref: thumb_outer_cluster
+          shift: [0.52dpx , -0.45dpy]
+        - ref: thumb2
+          shift: [0.5dpx , -0.53dpy]
+        - ref: thumb2
+          shift: [-0.5dpx , -0.53dpy]
+        - ref: thumb_inner_cluster
+          shift: [-0.47dpx , -0.53dpy]
+        - ref: matrix_pinkie_bottom
+          shift: [0.4dpx , -0.53dpy]
+        - ref: matrix_outer_bottom
+          shift: [-0.54dpx , -0.53dpy]
+  x1Board_right:
+    - what: polygon
+      operation: stack
+      fillet: 2
+      points:
+        - ref: mirror_matrix_outer_functions
+          shift: [-0.54dpx , 0.5dpy]
+        - ref: mirror_matrix_middle_functions
+          shift: [-0.6dpx , 0.53dpy]
+        - ref: mirror_matrix_middle_functions
+          shift: [0.5dpx , 0.53dpy]
+        - ref: mirror_matrix_inner_functions
+          shift: [1.25dpx , 0.5dpy]
+        - ref: mirror_matrix_inner_bottom
+          shift: [1.25dpx , -0.65dpy]
+        - ref: mirror_thumb_outer_cluster
+          shift: [0.53dpx , 0.53dpy]
+        - ref: mirror_thumb_outer_cluster
+          shift: [0.52dpx , -0.45dpy]
+        - ref: mirror_thumb2
+          shift: [0.5dpx , -0.53dpy]
+        - ref: mirror_thumb2
+          shift: [-0.5dpx , -0.53dpy]
+        - ref: mirror_thumb_inner_cluster
+          shift: [-0.47dpx , -0.53dpy]
+        - ref: mirror_matrix_pinkie_bottom
+          shift: [0.4dpx , -0.53dpy]
+        - ref: mirror_matrix_outer_bottom
+          shift: [-0.54dpx , -0.53dpy]
+  x1Board_key_cutouts:
+    - name: x1Board_left
+    - operation: subtract
+      name: keys
+  mounting_left:
+    - what: circle
+      radius: screwSize
+      where: 
+          ref: matrix_outer_functions
+          shift: [-0.5kx , 0.5ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: matrix_ring_functions
+          shift: [0.35kx , 0.8ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: matrix_inner_functions
+          shift: [1.45kx , 0.48ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: thumb_middle_cluster
+          shift: [0.18kx , 0.75ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: thumb2
+          shift: [0.53kx , -0.48ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: matrix_outer_bottom
+          shift: [-0.5kx , -0.5ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: matrix_middle_top
+          shift: [-0.47kx , -0.5ky]
+  mounting_right:
+    - what: circle
+      radius: screwSize
+      where: 
+          ref: mirror_matrix_outer_functions
+          shift: [-0.5kx , 0.5ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: mirror_matrix_ring_functions
+          shift: [0.35kx , 0.8ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: mirror_matrix_inner_functions
+          shift: [1.45kx , 0.48ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: mirror_thumb_middle_cluster
+          shift: [0.18kx , 0.75ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: mirror_thumb2
+          shift: [0.53kx , -0.48ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: mirror_matrix_outer_bottom
+          shift: [-0.5kx , -0.5ky]
+    - what: circle
+      radius: screwSize
+      where:
+          ref: mirror_matrix_middle_top
+          shift: [-0.47kx , -0.5ky]
+  standoff_left:
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_outer_functions
+          shift: [-0.5kx , 0.5ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_ring_functions
+          shift: [0.35kx , 0.8ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_inner_functions
+          shift: [1.45kx , 0.48ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: thumb_middle_cluster
+          shift: [0.18kx , 0.75ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: thumb2
+          shift: [0.53kx , -0.48ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_outer_bottom
+          shift: [-0.5kx , -0.5ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_middle_top
+          shift: [-0.47kx , -0.5ky]
+  standoff_right:
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_outer_functions
+          shift: [-0.5kx , 0.5ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_ring_functions
+          shift: [0.35kx , 0.8ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_inner_functions
+          shift: [1.45kx , 0.48ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: thumb_middle_cluster
+          shift: [0.18kx , 0.75ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: thumb2
+          shift: [0.53kx , -0.48ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_outer_bottom
+          shift: [-0.5kx , -0.5ky]
+    - what: circle
+      radius: standoffSize
+      where:
+          ref: matrix_middle_top
+          shift: [-0.47kx , -0.5ky]
+  walls_left:
+  - name: x1Board_left
+    operation: stack
+  - name: board_left
+    operation: stack
 pcbs:
-  main:
+  left:
     outlines:
-      - outline: combo
+      - outline: board_left
     template: kicad8   
     footprints:
       Cherry ULP:
         what: mx6b_ulp
-        where: true
+        where: /^matrix_.*/
         params:
-          from: "{{colrow}}"
-          to: "{{row_net}}"
+          from: "{{column_net}}"
+          to: "{{colrow}}"
       diode:
         what: ceoloide/diode_tht_sod123
-        where: true
+        where: /^matrix_.*/
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
+          side: B
         adjust:
           shift: [0 , 3]
       nice_nano: #controller
@@ -266,28 +526,55 @@ pcbs:
         params:
           side: B
           reverse_mount: true
+          P0: P0
+          P1: P1
+          P2: P2
+          P3: P3
+          P4: P4
+          P5: P5
+          P6: P6
+          P7: P7
+          P8: P8
+          P9: P9
+          P10: P10
+          P18: P18
+          P19: P19
+          P20: P20
+          P21: P21
         where:
          ref: matrix_inner_functions
-         shift: [32 , -11]
+         shift: [19 , -14]
+         rotate: 0
       reset:
         what: ceoloide/reset_switch_smd_side
         params:
           from: GND
           to: RST
+          side: B
         where:
           ref: matrix_inner_functions
-          shift: [50.5 , 0]
-          rotate: -90
+          shift: [4 , 16]
+          rotate: -14
+      on/off switch:
+        what: ceoloide/power_switch_smd_side
+        where:
+          ref: matrix_inner_top
+          shift: [28.5 , 5]
+          rotate: 0
+        params:
+          side: B
+          from: BAT_P
+          to: RAW
       battery conn:
         what: ceoloide/battery_connector_jst_ph_2
         params:
           side: B
-          BAT_P: RAW
+          BAT_P: BAT_P
           BAT_N: GND
         where:
-          ref: matrix_inner_functions
-          rotate: 0
-          shift: [15 , 12]
+          ref: matrix_inner_home
+          rotate: -90
+          shift: [25 , 0]
       oled:
         what: ceoloide/display_ssd1306
         params:
@@ -297,11 +584,11 @@ pcbs:
           GND: GND
         where:
           ref: matrix_inner_home
-          shift: [32 , 20]
-          rotate: -90
+          shift: [20 , 0]
+          rotate: 180
       switch_led:
         what: ceoloide/led_sk6812mini-e
-        where: [true]
+        where: /^matrix_.*/
         params:
           P1: VCC
           P2: "{{key.led_next}}" #DOUT
@@ -311,21 +598,243 @@ pcbs:
           reverse_mount: true
           include_courtyard: false
           include_keepout: true
+          side: F
         adjust:
           shift: [led_pos_x, led_pos_y + 5]
           rotate: led_rotation
-      thumb_switch_led:
+      holeTopLeft:
+        what: ceoloide/mounting_hole_plated
+        where: 
+          ref: matrix_outer_functions
+          shift: [-0.55kx , 0.6ky]
+      holeTopMiddle:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: matrix_ring_functions
+          shift: [0.4kx , 0.95ky]
+      holeTopRight:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: matrix_inner_functions
+          shift: [1.7kx , 0.55ky]
+      holeMiddleRight:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: thumb_middle_cluster
+          shift: [0.18kx , 0.75ky]
+      holeBottomRight:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: thumb2
+          shift: [0.63kx , -0.53ky]
+      holeBottomLeft:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: matrix_outer_bottom
+          shift: [-0.55kx , -0.55ky]
+      holeMiddle:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: matrix_middle_top
+          shift: [-0.57kx , -0.5ky]
+      text:
+        what: ceoloide/utility_text
+        where:
+          ref: matrix_inner_functions
+          shift: [20 , -5]
+          rotate: -90
+        params:
+          text: Sypher By Malus Knight
+          italic: true
+          side: B
+  right:
+    outlines:
+      - outline: board_right
+    template: kicad8   
+    footprints:
+      Cherry ULP:
+        what: mx6b_ulp
+        where: /^mirror_matrix_.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diode:
+        what: ceoloide/diode_tht_sod123
+        where: /^mirror_matrix_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          side: B
+        adjust:
+          shift: [0 , 3]
+      nice_nano: #controller
+        what: ceoloide/mcu_nice_nano
+        params:
+          side: B
+          reverse_mount: true
+          P0: P0
+          P1: P1
+          P2: P2
+          P3: P3
+          P4: P4
+          P5: P5
+          P6: P6
+          P7: P7
+          P8: P8
+          P9: P9
+          P10: P10
+          P18: P18
+          P19: P19
+          P20: P20
+          P21: P21
+        where:
+         ref: mirror_matrix_inner_functions
+         shift: [19 , -14]
+         rotate: 0
+      reset:
+        what: ceoloide/reset_switch_smd_side
+        params:
+          from: GND
+          to: RST
+          side: B
+        where:
+          ref: mirror_thumb_inner_cluster
+          shift: [-4, -18]
+          rotate: 128
+      on/off switch:
+        what: ceoloide/power_switch_smd_side
+        where:
+          ref: mirror_matrix_inner_home
+          shift: [28.7 , 0]
+          rotate: 0
+        params:
+          side: B
+          from: BAT_P
+          to: RAW
+      battery conn:
+        what: ceoloide/battery_connector_jst_ph_2
+        params:
+          side: B
+          BAT_P: BAT_P
+          BAT_N: GND
+        where:
+          ref: mirror_matrix_pinkie_bottom
+          rotate: 180
+          shift: [15 , -2]
+      oled:
+        what: ceoloide/display_ssd1306
+        params:
+          SDA: P18
+          SCL: P19
+          VCC: VCC
+          GND: GND
+        where:
+          ref: mirror_matrix_inner_home
+          shift: [20 , 0]
+          rotate: 180
+      switch_led:
         what: ceoloide/led_sk6812mini-e
-        where: [true]
+        where: /^mirror_matrix_.*/
         params:
           P1: VCC
-          P2: "{{key.led2_next}}" #DOUT
+          P2: "{{key.led_next}}" #DOUT
           P3: GND
-          P4: "{{key.led2_prev}}" #DIN
+          P4: "{{key.led_prev}}" #DIN
           reversible: false
           reverse_mount: true
           include_courtyard: false
           include_keepout: true
+          side: F
         adjust:
           shift: [led_pos_x, led_pos_y + 5]
           rotate: led_rotation
+      holeTopLeft:
+        what: ceoloide/mounting_hole_plated
+        where: 
+          ref: mirror_matrix_outer_functions
+          shift: [-0.5kx , 0.5ky]
+      holeTopMiddle:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: mirror_matrix_ring_functions
+          shift: [0.35kx , 0.8ky]
+      holeTopRight:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: mirror_matrix_inner_functions
+          shift: [1.45kx , 0.48ky]
+      holeMiddleRight:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: mirror_thumb_middle_cluster
+          shift: [0.18kx , 0.75ky]
+      holeBottomRight:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: mirror_thumb2
+          shift: [0.53kx , -0.48ky]
+      holeBottomLeft:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: mirror_matrix_outer_bottom
+          shift: [-0.5kx , -0.5ky]
+      holeMiddle:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: mirror_matrix_middle_top
+          shift: [-0.47kx , -0.5ky]
+      text:
+        what: ceoloide/utility_text
+        where:
+          ref: mirror_matrix_inner_functions
+          shift: [20 , -5]
+          rotate: -90
+        params:
+          text: Sypher By Malus Knight
+          italic: true
+          side: B
+case:
+  top_plate:
+   - what: x1Board_key_cutouts
+     operation: subtract
+  bottom:
+    - name: board
+      extrude: 1
+  x1Bottom:
+    - name: x1Board
+      extrude: 1
+  _outerWall:
+    - name: x1Board
+      extrude: 5.6
+  _innerWall:
+    - name: board
+      extrude: 5.6
+  wall:
+    - what: case
+      name: _outerWall
+      operation: add
+    - what: case
+      name: _innerWall
+      operation: subtract
+  _holes:
+    - name: mounting
+      extrude: 4
+  _standoffs:
+    - name: standoff
+      extrude: 4      
+  case:
+    - what: case
+      name: _standoffs
+      operation: add
+    - what: case
+      name: _holes
+      operation: subtract
+    - what: case
+      name: x1Bottom
+      operation: add
+    - what: case
+      name: wall
+      operation: add
+    - what: case
+      name: wall
+      operation: add
