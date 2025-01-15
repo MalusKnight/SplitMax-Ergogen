@@ -1,5 +1,4 @@
 units:
-  # Sypher Keyboard
   # Cherry MX ULP Switches
   sx: u
   sy: u
@@ -506,15 +505,45 @@ pcbs:
       - outline: board_left
     template: kicad8   
     footprints:
-      Cherry ULP:
+      Cherry ULP Main:
         what: mx6b_ulp
         where: /^matrix_.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      Cherry ULP Thumb:
+        what: mx6b_ulp
+        where: /^thumb_.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      Cherry ULP Thumb2:
+        what: mx6b_ulp
+        where: /^thumb2_.*/
         params:
           from: "{{column_net}}"
           to: "{{colrow}}"
       diode:
         what: ceoloide/diode_tht_sod123
         where: /^matrix_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          side: B
+        adjust:
+          shift: [0 , 3]
+      diode thumb:
+        what: ceoloide/diode_tht_sod123
+        where: /^thumb_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          side: B
+        adjust:
+          shift: [0 , 3]
+      diode thumb2:
+        what: ceoloide/diode_tht_sod123
+        where: /^thumb2_.*/
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
@@ -602,6 +631,38 @@ pcbs:
         adjust:
           shift: [led_pos_x, led_pos_y + 5]
           rotate: led_rotation
+      switch led thumb:
+        what: ceoloide/led_sk6812mini-e
+        where: /^thumb_.*/
+        params:
+          P1: VCC
+          P2: "{{key.led_next}}" #DOUT
+          P3: GND
+          P4: "{{key.led_prev}}" #DIN
+          reversible: false
+          reverse_mount: true
+          include_courtyard: false
+          include_keepout: true
+          side: F
+        adjust:
+          shift: [led_pos_x, led_pos_y + 5]
+          rotate: led_rotation
+      switch led thumb2:
+        what: ceoloide/led_sk6812mini-e
+        where: /^thumb2_.*/
+        params:
+          P1: VCC
+          P2: "{{key.led_next}}" #DOUT
+          P3: GND
+          P4: "{{key.led_prev}}" #DIN
+          reversible: false
+          reverse_mount: true
+          include_courtyard: false
+          include_keepout: true
+          side: F
+        adjust:
+          shift: [led_pos_x, led_pos_y + 5]
+          rotate: led_rotation
       holeTopLeft:
         what: ceoloide/mounting_hole_plated
         where: 
@@ -621,7 +682,7 @@ pcbs:
         what: ceoloide/mounting_hole_plated
         where:
           ref: thumb_middle_cluster
-          shift: [0.18kx , 0.75ky]
+          shift: [0.18kx , 0.85ky]
       holeBottomRight:
         what: ceoloide/mounting_hole_plated
         where:
